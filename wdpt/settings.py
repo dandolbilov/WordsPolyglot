@@ -109,6 +109,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+from django.conf.locale.en import formats as en_formats
+en_formats.DATETIME_FORMAT = "Y-m-d H:i:s e"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
