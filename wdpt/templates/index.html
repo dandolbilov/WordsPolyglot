@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="container">
+
+<h2>Basic Words</h2>
+
+<ul>
+{% for row in basic_words %}
+    <li>word = {{ row.word }}, PoS = {{ row.p_o_s }}, level = {{ row.level }}, rank = {{ row.rank }}, created = {{ row.created }}, updated = {{ row.updated }}</li>
+{% endfor %}
+</ul>
+
+</div>
+
+{% endblock %}

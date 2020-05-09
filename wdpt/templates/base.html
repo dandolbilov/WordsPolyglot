@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WordsPolyglot</title>
+  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+  <style type="text/css">
+    body {
+        padding-bottom: 80px;
+    }
+    .navbar {
+        background: #417690;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top navbar-inverse">
+  <div class="container">
+    <ul class="nav navbar-nav">
+      <li><a href="/"><span></span>Home</a></li>
+      <li><a href="/admin"><span></span>Admin</a></li>
+    </ul>
+  </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
