@@ -6,11 +6,15 @@
 """
 
 from django.contrib import admin
-from .models import BasicWord
+from .models import RankedWord, UserWord
 
 
-class BasicWordAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in BasicWord._meta.get_fields() if field.name not in ['id', 'created']]
+class RankedWordAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in RankedWord._meta.get_fields() if field.name not in ['id', 'created']]
+
+class UserWordAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in UserWord._meta.get_fields() if field.name not in ['id', 'created']]
 
 
-admin.site.register(BasicWord, BasicWordAdmin)
+admin.site.register(RankedWord, RankedWordAdmin)
+admin.site.register(UserWord, UserWordAdmin)

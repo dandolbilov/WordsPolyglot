@@ -8,7 +8,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import BasicWord
+from .models import RankedWord, UserWord
 
 
 def fmt_date(dt):
@@ -22,17 +22,22 @@ def fmt_date(dt):
 
 def index(request):
     # add some test records if database is empty
-    if not BasicWord.objects.count():
-        BasicWord(lang='eng', word='name', p_o_s='noun|verb', level='A1', rank=299).save()
-        BasicWord(lang='eng', word='street', p_o_s='noun', level='A1', rank=555).save()
+    if not RankedWord.objects.count():
+        RankedWord(listname='engCambridge', word='name', p_o_s='noun', level='A1').save()
+        RankedWord(listname='engCambridge', word='name', p_o_s='verb', level='B1').save()
+        RankedWord(listname='engCambridge', word='street', p_o_s='noun', level='A1').save()
+        RankedWord(listname='engFreq5000', word='name', p_o_s='noun', rank=299).save()
+        RankedWord(listname='engFreq5000', word='name', p_o_s='verb', rank=816).save()
+        RankedWord(listname='engFreq5000', word='street', p_o_s='noun', rank=555).save()
 
-    return render(request, "index.html", {"basic_words": BasicWord.objects.all()})
+    table_counters = {'RankedWord':RankedWord.objects.count(), 'UserWord':UserWord.objects.count()}
+    return render(request, "index.html", {"table_counters": table_counters})
 
 
 def ajax_get(request):
     resp_data = []
-    for o in BasicWord.objects.all():
-        d = {k:v for k,v in o.__dict__.items() if k in ['id', 'lang', 'word', 'p_o_s', 'level', 'rank']}
+    for o in RankedWord.objects.all():
+        d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
         d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
         resp_data.append(d)
     return HttpResponse(json.dumps(resp_data), content_type="application/json")
