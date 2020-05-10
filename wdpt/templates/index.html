@@ -13,6 +13,46 @@
 {% endfor %}
 </ul>
 
+<div><button id="load-bw1">Load Data</button></div>
+<div id="table-bw1"></div>
+
+<br/>
+<div><button id="load-bw2">Load Data</button></div>
+<div id="table-bw2"></div>
+
 </div>
+
+<script>
+
+$(document).ready(function() {
+
+function init_bw_table(table_id, button_id) {
+    var bw = new Tabulator(table_id, {
+        height:"200px",
+        layout:"fitColumns",
+        placeholder:"No Data Set",
+        initialSort:[{column:"rank", dir:"asc"}],
+        columns:[
+            {title:"Rank", field:"rank", sorter:"string", width:80},
+            {title:"Word", field:"word", sorter:"string"},
+            {title:"PoS", field:"p_o_s", sorter:"string"},
+            {title:"Level", field:"level", sorter:"string", hozAlign:"center", width:80},
+            {title:"Lang", field:"lang", sorter:"string"},
+            {title:"Updated", field:"updated", sorter:"string"},
+            {title:"Created", field:"created", sorter:"string"},
+            {title:"ID", field:"id", sorter:"string", width:50},
+        ],
+    });
+
+    // trigger AJAX load on button click
+    document.getElementById(button_id).addEventListener("click", function(){
+        bw.setData("/ajax_get");
+    });
+}
+    var table1 = init_bw_table("#table-bw1", "load-bw1");
+    var table2 = init_bw_table("#table-bw2", "load-bw2");
+});
+
+</script>
 
 {% endblock %}

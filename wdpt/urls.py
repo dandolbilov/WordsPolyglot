@@ -22,5 +22,6 @@ import wdpt.views
 
 urlpatterns = [
     path("", wdpt.views.index, name="index"),
+    path("ajax_get/", wdpt.views.ajax_get, name="ajax_get"),
     path("admin/", admin.site.urls),
 ]
