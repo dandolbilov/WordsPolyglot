@@ -13,11 +13,23 @@
 {% endfor %}
 </ul>
 
-<div><button id="load-bw1">Load Data</button></div>
+<div>
+  <select id="select-bw1">
+    <option value="engCambridge" selected>engCambridge</option>
+    <option value="engFreq5000">engFreq5000</option>
+  </select>
+  <button id="load-bw1">Load Data</button>
+</div>
 <div id="table-bw1"></div>
 
 <br/>
-<div><button id="load-bw2">Load Data</button></div>
+<div>
+  <select id="select-bw2">
+    <option value="engCambridge">engCambridge</option>
+    <option value="engFreq5000" selected>engFreq5000</option>
+  </select>
+  <button id="load-bw2">Load Data</button>
+</div>
 <div id="table-bw2"></div>
 
 </div>
@@ -26,31 +38,29 @@
 
 $(document).ready(function() {
 
-function init_bw_table(table_id, button_id) {
+function init_bw_table(table_id, select_id, button_id) {
     var bw = new Tabulator(table_id, {
         height:"200px",
         layout:"fitColumns",
         placeholder:"No Data Set",
-        initialSort:[{column:"rank", dir:"asc"}],
+        initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}],
         columns:[
-            {title:"Rank", field:"rank", sorter:"string", width:80},
             {title:"Word", field:"word", sorter:"string"},
             {title:"PoS", field:"p_o_s", sorter:"string"},
+            {title:"Rank", field:"rank", sorter:"string", width:80},
             {title:"Level", field:"level", sorter:"string", hozAlign:"center", width:80},
-            {title:"List Name", field:"listname", sorter:"string"},
             {title:"Updated", field:"updated", sorter:"string"},
-            {title:"Created", field:"created", sorter:"string"},
-            {title:"ID", field:"id", sorter:"string", width:50},
         ],
     });
 
     // trigger AJAX load on button click
     document.getElementById(button_id).addEventListener("click", function(){
-        bw.setData("/ajax_get");
+        listName = $(select_id).val();
+        bw.setData("/ajax_get?ln=" + listName);
     });
 }
-    var table1 = init_bw_table("#table-bw1", "load-bw1");
-    var table2 = init_bw_table("#table-bw2", "load-bw2");
+    var table1 = init_bw_table("#table-bw1", "#select-bw1", "load-bw1");
+    var table2 = init_bw_table("#table-bw2", "#select-bw2", "load-bw2");
 });
 
 </script>

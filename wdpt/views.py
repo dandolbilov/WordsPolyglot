@@ -36,8 +36,11 @@ def index(request):
 
 def ajax_get(request):
     resp_data = []
-    for o in RankedWord.objects.all():
+
+    ln = request.GET.get('ln', '')
+    for o in RankedWord.objects.filter(listname=ln):
         d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
         d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
         resp_data.append(d)
+
     return HttpResponse(json.dumps(resp_data), content_type="application/json")
