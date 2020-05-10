@@ -43,45 +43,8 @@
 <script>
 
 $(document).ready(function() {
-
-function init_bw_table(table_id, select_id, button_id, csv_button_id, json_button_id, from_json_button_id) {
-    var bw = new Tabulator(table_id, {
-        height:"200px",
-        layout:"fitColumns",
-        placeholder:"No Data Set",
-        initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}],
-        columns:[
-            {title:"Word", field:"word", sorter:"string"},
-            {title:"PoS", field:"p_o_s", sorter:"string"},
-            {title:"Rank", field:"rank", sorter:"string", width:80},
-            {title:"Level", field:"level", sorter:"string", hozAlign:"center", width:80},
-            {title:"Updated", field:"updated", sorter:"string"},
-        ],
-    });
-
-    // trigger AJAX load on button click
-    document.getElementById(button_id).addEventListener("click", function(){
-        listName = $(select_id).val();
-        bw.setData("/ajax_get?ln=" + listName);
-    });
-    // trigger download of CSV file
-    document.getElementById(csv_button_id).addEventListener("click", function(){
-        listName = $(select_id).val();
-        bw.download("csv", listName + "_data.csv");
-    });
-    // trigger download of JSON file
-    document.getElementById(json_button_id).addEventListener("click", function(){
-        listName = $(select_id).val();
-        bw.download("json", listName + "_data.json");
-    });
-    // trigger load from local JSON file
-    document.getElementById(from_json_button_id).addEventListener("click", function(){
-        bw.setDataFromLocalFile();
-        // TODO: save loaded data to server
-    });
-}
-    var table1 = init_bw_table("#table-bw1", "#select-bw1", "load-bw1", "download-csv-bw1", "download-json-bw1", "from-json-bw1");
-    var table2 = init_bw_table("#table-bw2", "#select-bw2", "load-bw2", "download-csv-bw2", "download-json-bw2", "from-json-bw2");
+    var tb1 = init_ranked_table("table-bw1", "select-bw1", "load-bw1", "download-csv-bw1", "download-json-bw1", "from-json-bw1");
+    var tb2 = init_ranked_table("table-bw2", "select-bw2", "load-bw2", "download-csv-bw2", "download-json-bw2", "from-json-bw2");
 });
 
 </script>
