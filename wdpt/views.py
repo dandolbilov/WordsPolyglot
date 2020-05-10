@@ -28,6 +28,9 @@ def add_test_data():
         RankedWord(listname='engFreq5000', word='name', p_o_s='noun', rank=299).save()
         RankedWord(listname='engFreq5000', word='name', p_o_s='verb', rank=816).save()
         RankedWord(listname='engFreq5000', word='street', p_o_s='noun', rank=555).save()
+    if not UserWord.objects.count():
+        UserWord(listname='engDanA1', word='name', p_o_s='noun', urank=1, phrase1="What's the name of this street?").save()
+        UserWord(listname='engDanA1', word='street', p_o_s='noun', urank=2, phrase1="Let's cross the street.").save()
 
 
 def index(request):
@@ -38,10 +41,17 @@ def index(request):
 def ajax_get(request):
     resp_data = []
 
+    tb = request.GET.get('tb', '')
     ln = request.GET.get('ln', '')
-    for o in RankedWord.objects.filter(listname=ln):
-        d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
-        d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
-        resp_data.append(d)
+    if tb == 'ranked':
+        for o in RankedWord.objects.filter(listname=ln):
+            d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
+            d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
+            resp_data.append(d)
+    elif tb == 'userwords':
+        for o in UserWord.objects.filter(listname=ln):
+            d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'urank', 'phrase1']}
+            d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
+            resp_data.append(d)
 
     return HttpResponse(json.dumps(resp_data), content_type="application/json")

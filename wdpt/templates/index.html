@@ -5,14 +5,13 @@
 
 <div class="container">
 
-<h2>Ranked Words</h2>
-
 <ul>
 {% for table_name, table_count in table_counters.items %}
     <li>{{ table_name }} = {{ table_count }}</li>
 {% endfor %}
 </ul>
 
+<h2>Ranked Words</h2>
 <div>
   <select id="select-bw1">
     <option value="engCambridge" selected>engCambridge</option>
@@ -25,11 +24,10 @@
 </div>
 <div id="table-bw1"></div>
 
-<br/>
+<h2>User Words</h2>
 <div>
   <select id="select-bw2">
-    <option value="engCambridge">engCambridge</option>
-    <option value="engFreq5000" selected>engFreq5000</option>
+    <option value="engDanA1" selected>engDanA1</option>
   </select>
   <button id="load-bw2">Load Data</button>
   <button id="download-csv-bw2">Download CSV</button>
@@ -43,8 +41,10 @@
 <script>
 
 $(document).ready(function() {
-    var tb1 = init_ranked_table("table-bw1", "select-bw1", "load-bw1", "download-csv-bw1", "download-json-bw1", "from-json-bw1");
-    var tb2 = init_ranked_table("table-bw2", "select-bw2", "load-bw2", "download-csv-bw2", "download-json-bw2", "from-json-bw2");
+    var tb1 = init_ranked_table("table-bw1", "select-bw1");
+    init_table_buttons(tb1, "select-bw1", "load-bw1", "download-csv-bw1", "download-json-bw1", "from-json-bw1");
+    var tb2 = init_userwords_table("table-bw2", "select-bw2");
+    init_table_buttons(tb2, "select-bw2", "load-bw2", "download-csv-bw2", "download-json-bw2", "from-json-bw2");
 });
 
 </script>
