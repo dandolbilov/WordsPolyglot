@@ -19,6 +19,9 @@
     <option value="engFreq5000">engFreq5000</option>
   </select>
   <button id="load-bw1">Load Data</button>
+  <button id="download-csv-bw1">Download CSV</button>
+  <button id="download-json-bw1">Download JSON</button>
+  <button id="from-json-bw1">From JSON</button>
 </div>
 <div id="table-bw1"></div>
 
@@ -29,6 +32,9 @@
     <option value="engFreq5000" selected>engFreq5000</option>
   </select>
   <button id="load-bw2">Load Data</button>
+  <button id="download-csv-bw2">Download CSV</button>
+  <button id="download-json-bw2">Download JSON</button>
+  <button id="from-json-bw2">From JSON</button>
 </div>
 <div id="table-bw2"></div>
 
@@ -38,7 +44,7 @@
 
 $(document).ready(function() {
 
-function init_bw_table(table_id, select_id, button_id) {
+function init_bw_table(table_id, select_id, button_id, csv_button_id, json_button_id, from_json_button_id) {
     var bw = new Tabulator(table_id, {
         height:"200px",
         layout:"fitColumns",
@@ -58,9 +64,24 @@ function init_bw_table(table_id, select_id, button_id) {
         listName = $(select_id).val();
         bw.setData("/ajax_get?ln=" + listName);
     });
+    // trigger download of CSV file
+    document.getElementById(csv_button_id).addEventListener("click", function(){
+        listName = $(select_id).val();
+        bw.download("csv", listName + "_data.csv");
+    });
+    // trigger download of JSON file
+    document.getElementById(json_button_id).addEventListener("click", function(){
+        listName = $(select_id).val();
+        bw.download("json", listName + "_data.json");
+    });
+    // trigger load from local JSON file
+    document.getElementById(from_json_button_id).addEventListener("click", function(){
+        bw.setDataFromLocalFile();
+        // TODO: save loaded data to server
+    });
 }
-    var table1 = init_bw_table("#table-bw1", "#select-bw1", "load-bw1");
-    var table2 = init_bw_table("#table-bw2", "#select-bw2", "load-bw2");
+    var table1 = init_bw_table("#table-bw1", "#select-bw1", "load-bw1", "download-csv-bw1", "download-json-bw1", "from-json-bw1");
+    var table2 = init_bw_table("#table-bw2", "#select-bw2", "load-bw2", "download-csv-bw2", "download-json-bw2", "from-json-bw2");
 });
 
 </script>

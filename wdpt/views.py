@@ -20,8 +20,7 @@ def fmt_date(dt):
         return dateformat.format(dt, "Y-m-d H:i:s e")
 
 
-def index(request):
-    # add some test records if database is empty
+def add_test_data():
     if not RankedWord.objects.count():
         RankedWord(listname='engCambridge', word='name', p_o_s='noun', level='A1').save()
         RankedWord(listname='engCambridge', word='name', p_o_s='verb', level='B1').save()
@@ -30,6 +29,8 @@ def index(request):
         RankedWord(listname='engFreq5000', word='name', p_o_s='verb', rank=816).save()
         RankedWord(listname='engFreq5000', word='street', p_o_s='noun', rank=555).save()
 
+
+def index(request):
     table_counters = {'RankedWord':RankedWord.objects.count(), 'UserWord':UserWord.objects.count()}
     return render(request, "index.html", {"table_counters": table_counters})
 
