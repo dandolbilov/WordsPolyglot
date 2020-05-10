@@ -45,8 +45,10 @@ def ajax_get(request):
     ln = request.GET.get('ln', '')
     if tb == 'ranked':
         for o in RankedWord.objects.filter(listname=ln):
+            known = UserWord.objects.filter(word=o.word, p_o_s=o.p_o_s).count()
             d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
             d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
+            d.update({'known':'true' if known else 'false'})
             resp_data.append(d)
     elif tb == 'userwords':
         for o in UserWord.objects.filter(listname=ln):

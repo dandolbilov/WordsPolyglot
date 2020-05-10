@@ -13,6 +13,7 @@ function init_ranked_table(table_id, select_id) {
             {title:"PoS", field:"p_o_s", sorter:"string"},
             {title:"Rank", field:"rank", sorter:"string", width:80},
             {title:"Level", field:"level", sorter:"string", hozAlign:"center", width:80},
+            {title:"Known", field:"known", width:90, hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
             {title:"Updated", field:"updated", sorter:"string"},
         ],
     });
