@@ -64,7 +64,18 @@ def ajax_get(request):
 def ajax_put(request):
     resp_data = {'msg': ''}
     try:
-        if request.method == "POST":
+        if request.method == "POST" and request.GET.get('act', '') == 'fromRanked':
+            listname='engDanA1'  # TODO: listname
+            p_word, p_pos = request.POST['word'], request.POST['p_o_s']
+            if UserWord.objects.filter(listname=listname, word=p_word, p_o_s=p_pos).count():
+                resp_data['msg'] = 'word exists'
+            else:
+                urank = UserWord.objects.filter(listname=listname).count() + 1
+                uw = UserWord(listname=listname, word=p_word, p_o_s=p_pos, urank=urank)
+                uw.save()
+                resp_data['msg'] = 'word added'
+
+        if request.method == "POST" and request.GET.get('act', '') == 'userwordsEdited':
             obj = UserWord.objects.filter(id=request.POST['id']).first()
             if not obj:
                 raise Exception('id not found')

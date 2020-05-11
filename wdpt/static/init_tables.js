@@ -16,6 +16,19 @@ function init_ranked_table(table_id, select_id) {
             {title:"Known", field:"known", width:90, hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
             {title:"Updated", field:"updated", sorter:"string"},
         ],
+        rowDblClick:function(e, row){
+            $.ajax({
+                url: "ajax_put/?act=fromRanked",
+                data: row.getData(),
+                type: "post",
+                success: function(resp, textStatus, xhr){
+                    console.info("AJAX fromRanked: " + textStatus + ", msg = " + resp.msg);
+                },
+                error: function(jqXHR, textStatus, error){
+                    console.error("AJAX fromRanked: " + textStatus + ", error = " + error);
+                }
+            })
+        },
     });
     return tb;
 }
@@ -38,7 +51,7 @@ function init_userwords_table(table_id, select_id) {
         ],
         cellEdited:function(cell){
             $.ajax({
-                url: "ajax_put/",
+                url: "ajax_put/?act=userwordsEdited",
                 data: cell.getRow().getData(),
                 type: "post",
                 success: function(resp, textStatus, xhr){
