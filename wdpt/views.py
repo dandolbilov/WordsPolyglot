@@ -8,6 +8,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import RankedWord, UserWord
 
 
@@ -55,5 +56,32 @@ def ajax_get(request):
             d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'urank', 'phrase1']}
             d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
             resp_data.append(d)
+
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
+@csrf_exempt
+def ajax_put(request):
+    resp_data = {'msg': ''}
+    try:
+        if request.method == "POST":
+            obj = UserWord.objects.filter(id=request.POST['id']).first()
+            if not obj:
+                raise Exception('id not found')
+            if obj.word != request.POST['word']:
+                raise Exception('word mismatch')
+
+            updated = []
+            for field in ['phrase1']:
+                new_val = request.POST[field]
+                if new_val != getattr(obj, field):
+                    setattr(obj, field, new_val)
+                    updated.append(field)
+            if updated:
+                obj.save()
+            resp_data['msg'] = 'updated: %s' % updated
+
+    except Exception as ex:
+        resp_data['msg'] = 'Exception: %s' % ex
 
     return HttpResponse(json.dumps(resp_data), content_type="application/json")

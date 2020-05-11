@@ -3,7 +3,7 @@ function init_ranked_table(table_id, select_id) {
     var tb = new Tabulator('#'+table_id, {
         height:"200px",
         layout:"fitColumns",
-        ajaxURL:"/ajax_get?ln=" + listName,
+        ajaxURL:"/ajax_get/?ln=" + listName,
         ajaxParams:{'tb':'ranked'},
         //ajaxProgressiveLoad:"scroll",
         placeholder:"No Data Set",
@@ -33,9 +33,22 @@ function init_userwords_table(table_id, select_id) {
             {title:"Word", field:"word", sorter:"string"},
             {title:"PoS", field:"p_o_s", sorter:"string"},
             {title:"URank", field:"urank", sorter:"string", width:80},
-            {title:"Phrase1", field:"phrase1", sorter:"string"},
+            {title:"Phrase1", field:"phrase1", sorter:"string", editor:"input"},
             {title:"Updated", field:"updated", sorter:"string"},
         ],
+        cellEdited:function(cell){
+            $.ajax({
+                url: "ajax_put/",
+                data: cell.getRow().getData(),
+                type: "post",
+                success: function(resp, textStatus, xhr){
+                    console.info("AJAX cellEdited: " + textStatus + ", msg = " + resp.msg);
+                },
+                error: function(jqXHR, textStatus, error){
+                    console.error("AJAX cellEdited: " + textStatus + ", error = " + error);
+                }
+            })
+        },
     });
     return tb;
 }
