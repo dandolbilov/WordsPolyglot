@@ -39,58 +39,65 @@ def index(request):
     return render(request, "index.html", {"table_counters": table_counters})
 
 
-def ajax_get(request):
+def ajax_get_ranked(request):
     resp_data = []
-
-    tb = request.GET.get('tb', '')
     ln = request.GET.get('ln', '')
-    if tb == 'ranked':
-        for o in RankedWord.objects.filter(listname=ln):
-            known = UserWord.objects.filter(word=o.word, p_o_s=o.p_o_s).count()
-            d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
-            d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
-            d.update({'known':'true' if known else 'false'})
-            resp_data.append(d)
-    elif tb == 'userwords':
-        for o in UserWord.objects.filter(listname=ln):
-            d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'urank', 'phrase1']}
-            d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
-            resp_data.append(d)
+    for o in RankedWord.objects.filter(listname=ln):
+        known = UserWord.objects.filter(word=o.word, p_o_s=o.p_o_s).count()
+        d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
+        d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
+        d.update({'known':'true' if known else 'false'})
+        resp_data.append(d)
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
+def ajax_get_userwords(request):
+    resp_data = []
+    ln = request.GET.get('ln', '')
+    for o in UserWord.objects.filter(listname=ln):
+        d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'urank', 'phrase1']}
+        d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
+        resp_data.append(d)
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
+@csrf_exempt
+def ajax_put_ranked_clicked(request):
+    resp_data = {'msg': ''}
+
+    listname='engDanA1'  # TODO: listname
+    p_word, p_pos = request.POST.get('word', ''), request.POST.get('p_o_s', '')
+
+    if UserWord.objects.filter(listname=listname, word=p_word, p_o_s=p_pos).count():
+        resp_data['msg'] = 'word exists'
+    else:
+        urank = UserWord.objects.filter(listname=listname).count() + 1
+        uw = UserWord(listname=listname, word=p_word, p_o_s=p_pos, urank=urank)
+        uw.save()
+        resp_data['msg'] = 'word added'
 
     return HttpResponse(json.dumps(resp_data), content_type="application/json")
 
 
 @csrf_exempt
-def ajax_put(request):
+def ajax_put_userwords_edited(request):
     resp_data = {'msg': ''}
     try:
-        if request.method == "POST" and request.GET.get('act', '') == 'fromRanked':
-            listname='engDanA1'  # TODO: listname
-            p_word, p_pos = request.POST['word'], request.POST['p_o_s']
-            if UserWord.objects.filter(listname=listname, word=p_word, p_o_s=p_pos).count():
-                resp_data['msg'] = 'word exists'
-            else:
-                urank = UserWord.objects.filter(listname=listname).count() + 1
-                uw = UserWord(listname=listname, word=p_word, p_o_s=p_pos, urank=urank)
-                uw.save()
-                resp_data['msg'] = 'word added'
+        obj = UserWord.objects.filter(id=request.POST['id']).first()
+        if not obj:
+            raise Exception('id not found')
+        if obj.word != request.POST['word']:
+            raise Exception('word mismatch')
 
-        if request.method == "POST" and request.GET.get('act', '') == 'userwordsEdited':
-            obj = UserWord.objects.filter(id=request.POST['id']).first()
-            if not obj:
-                raise Exception('id not found')
-            if obj.word != request.POST['word']:
-                raise Exception('word mismatch')
-
-            updated = []
-            for field in ['phrase1']:
-                new_val = request.POST[field]
-                if new_val != getattr(obj, field):
-                    setattr(obj, field, new_val)
-                    updated.append(field)
-            if updated:
-                obj.save()
-            resp_data['msg'] = 'updated: %s' % updated
+        updated = []
+        for field in ['phrase1']:
+            new_val = request.POST[field]
+            if new_val != getattr(obj, field):
+                setattr(obj, field, new_val)
+                updated.append(field)
+        if updated:
+            obj.save()
+        resp_data['msg'] = 'updated: %s' % updated
 
     except Exception as ex:
         resp_data['msg'] = 'Exception: %s' % ex

@@ -8,7 +8,7 @@ function init_ranked_table(table_id, select_id) {
                 return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
             }).join('&');
             var listName = $('#'+select_id).val();
-            return "/ajax_get/?ln=" + listName + "&tb=ranked" + "&" + paramsStr;
+            return "/ajax/get/ranked/?ln=" + listName + "&" + paramsStr;
         },
         //ajaxProgressiveLoad:"scroll",
         placeholder:"No Data Set",
@@ -23,7 +23,7 @@ function init_ranked_table(table_id, select_id) {
         ],
         rowDblClick:function(e, row){
             $.ajax({
-                url: "ajax_put/?act=fromRanked",
+                url: "ajax/put/ranked/clicked/",
                 data: row.getData(),
                 type: "post",
                 success: function(resp, textStatus, xhr){
@@ -51,7 +51,7 @@ function init_userwords_table(table_id, select_id) {
                 return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
             }).join('&');
             var listName = $('#'+select_id).val();
-            return "/ajax_get/?ln=" + listName + "&tb=userwords" + "&" + paramsStr;
+            return "/ajax/get/userwords/?ln=" + listName + "&" + paramsStr;
         },
         placeholder:"No Data Set",
         initialSort:[{column:"urank", dir:"asc"}],
@@ -64,7 +64,7 @@ function init_userwords_table(table_id, select_id) {
         ],
         cellEdited:function(cell){
             $.ajax({
-                url: "ajax_put/?act=userwordsEdited",
+                url: "ajax/put/userwords/edited/",
                 data: cell.getRow().getData(),
                 type: "post",
                 success: function(resp, textStatus, xhr){
