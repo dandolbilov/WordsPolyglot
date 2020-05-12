@@ -68,7 +68,6 @@ function init_userwords_table(table_id, select_id) {
                 data: row.getData(),
                 type: "post",
                 success: function(resp, textStatus, xhr){
-                    alert("AJAX userwords-clicked: " + textStatus + ", msg = " + resp.msg);
                     console.info("AJAX userwords-clicked: " + textStatus + ", msg = " + resp.msg);
                 },
                 error: function(jqXHR, textStatus, error){
@@ -113,7 +112,21 @@ function init_table_buttons(tb, select_id, button_id, csv_button_id, json_button
     });
     // trigger load from local JSON file
     document.getElementById(from_json_button_id).addEventListener("click", function(){
-        tb.setDataFromLocalFile();
-        // TODO: save loaded data to server
+        tb.setDataFromLocalFile().then(function() {
+            // save loaded data to server
+            var listName = $('#'+select_id).val();
+            $.ajax({
+                url: "ajax/put/ranked/import/?ln=" + listName,  // TODO: ranked => ranked/userwords
+                data: JSON.stringify(tb.getData()),
+                dataType: 'json',
+                type: "post",
+                success: function(resp, textStatus, xhr){
+                    console.info("AJAX ranked-import: " + textStatus + ", msg = " + resp.msg);
+                },
+                error: function(jqXHR, textStatus, error){
+                    console.error("AJAX ranked-import: " + textStatus + ", error = " + error);
+                }
+            })
+        })
     });
 }

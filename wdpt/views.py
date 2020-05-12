@@ -62,6 +62,19 @@ def ajax_get_userwords(request):
 
 
 @csrf_exempt
+def ajax_put_ranked_import(request):
+    row_list = json.loads(request.body)
+    ln = request.GET.get('ln', '')
+    if row_list and row_list[0]['listname'] == ln:
+        RankedWord.objects.filter(listname=ln).delete()  # CLEAR LIST
+    for row in row_list:
+        rw = RankedWord(listname=row['listname'], word=row['word'], p_o_s=row['p_o_s'], level=row['level'], rank=row['rank'])
+        rw.save()
+    resp_data = {'msg': 'imported: %s' % len(row_list)}
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
+@csrf_exempt
 def ajax_put_ranked_clicked(request):
     resp_data = {'msg': ''}
 
