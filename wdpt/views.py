@@ -80,6 +80,17 @@ def ajax_put_ranked_clicked(request):
 
 
 @csrf_exempt
+def ajax_put_userwords_clicked(request):
+    p_list = request.POST.get('listname', '')
+    p_word, p_pos = request.POST.get('word', ''), request.POST.get('p_o_s', '')
+
+    del_num, del_dict = UserWord.objects.filter(listname=p_list, word=p_word, p_o_s=p_pos).delete()
+    resp_data = {'msg': 'deleted: %s' % del_num}
+
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
+@csrf_exempt
 def ajax_put_userwords_edited(request):
     resp_data = {'msg': ''}
     try:

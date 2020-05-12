@@ -62,6 +62,20 @@ function init_userwords_table(table_id, select_id) {
             {title:"Phrase1", field:"phrase1", sorter:"string", editor:"input"},
             {title:"Updated", field:"updated", sorter:"string"},
         ],
+        rowDblClick:function(e, row){
+            $.ajax({
+                url: "ajax/put/userwords/clicked/",
+                data: row.getData(),
+                type: "post",
+                success: function(resp, textStatus, xhr){
+                    alert("AJAX userwords-clicked: " + textStatus + ", msg = " + resp.msg);
+                    console.info("AJAX userwords-clicked: " + textStatus + ", msg = " + resp.msg);
+                },
+                error: function(jqXHR, textStatus, error){
+                    console.error("AJAX userwords-clicked: " + textStatus + ", error = " + error);
+                }
+            })
+        },
         cellEdited:function(cell){
             $.ajax({
                 url: "ajax/put/userwords/edited/",
