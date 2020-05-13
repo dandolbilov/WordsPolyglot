@@ -1,3 +1,15 @@
+var ajaxCount = 0;
+
+function on_ajax_success(msg) {
+    console.info(msg);
+    $('#ajax-response').html("[" + ++ajaxCount + "] AJAX " + msg);
+}
+
+function on_ajax_error(msg) {
+    console.error(msg);
+    $('#ajax-response').html("[" + ++ajaxCount + "] AJAX " + msg);
+}
+
 function init_ranked_table(table_id, select_id) {
     var listName = $('#'+select_id).val();
     var tb = new Tabulator('#'+table_id, {
@@ -27,10 +39,10 @@ function init_ranked_table(table_id, select_id) {
                 data: row.getData(),
                 type: "post",
                 success: function(resp, textStatus, xhr){
-                    console.info("AJAX fromRanked: " + textStatus + ", msg = " + resp.msg);
+                    on_ajax_success("ranked-clicked: " + textStatus + ", msg = " + resp.msg);
                 },
                 error: function(jqXHR, textStatus, error){
-                    console.error("AJAX fromRanked: " + textStatus + ", error = " + error);
+                    on_ajax_error("ranked-clicked: " + textStatus + ", error = " + error);
                 }
             })
         },
@@ -68,10 +80,10 @@ function init_userwords_table(table_id, select_id) {
                 data: row.getData(),
                 type: "post",
                 success: function(resp, textStatus, xhr){
-                    console.info("AJAX userwords-clicked: " + textStatus + ", msg = " + resp.msg);
+                    on_ajax_success("userwords-clicked: " + textStatus + ", msg = " + resp.msg);
                 },
                 error: function(jqXHR, textStatus, error){
-                    console.error("AJAX userwords-clicked: " + textStatus + ", error = " + error);
+                    on_ajax_error("userwords-clicked: " + textStatus + ", error = " + error);
                 }
             })
         },
@@ -81,10 +93,10 @@ function init_userwords_table(table_id, select_id) {
                 data: cell.getRow().getData(),
                 type: "post",
                 success: function(resp, textStatus, xhr){
-                    console.info("AJAX cellEdited: " + textStatus + ", msg = " + resp.msg);
+                    on_ajax_success("cellEdited: " + textStatus + ", msg = " + resp.msg);
                 },
                 error: function(jqXHR, textStatus, error){
-                    console.error("AJAX cellEdited: " + textStatus + ", error = " + error);
+                    on_ajax_error("cellEdited: " + textStatus + ", error = " + error);
                 }
             })
         },
@@ -121,10 +133,10 @@ function init_table_buttons(tb, select_id, button_id, csv_button_id, json_button
                 dataType: 'json',
                 type: "post",
                 success: function(resp, textStatus, xhr){
-                    console.info("AJAX ranked-import: " + textStatus + ", msg = " + resp.msg);
+                    on_ajax_success("ranked-import: " + textStatus + ", msg = " + resp.msg);
                 },
                 error: function(jqXHR, textStatus, error){
-                    console.error("AJAX ranked-import: " + textStatus + ", error = " + error);
+                    on_ajax_error("ranked-import: " + textStatus + ", error = " + error);
                 }
             })
         })
