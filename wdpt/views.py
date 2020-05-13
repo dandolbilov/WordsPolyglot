@@ -114,7 +114,7 @@ def ajax_put_userwords_edited(request):
             raise Exception('word mismatch')
 
         updated = []
-        for field in ['phrase1']:
+        for field in ['urank', 'phrase1']:
             new_val = request.POST[field]
             if new_val != getattr(obj, field):
                 setattr(obj, field, new_val)

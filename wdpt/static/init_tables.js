@@ -24,7 +24,7 @@ function init_ranked_table(table_id, select_id) {
         },
         //ajaxProgressiveLoad:"scroll",
         placeholder:"No Data Set",
-        initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}],
+        initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}, {column:"known", dir:"asc"}],
         columns:[
             {title:"Word", field:"word", sorter:"string"},
             {title:"PoS", field:"p_o_s", sorter:"string"},
@@ -71,7 +71,7 @@ function init_userwords_table(table_id, select_id) {
         columns:[
             {title:"Word", field:"word", sorter:"string"},
             {title:"PoS", field:"p_o_s", sorter:"string"},
-            {title:"URank", field:"urank", sorter:"string", width:80},
+            {title:"URank", field:"urank", sorter:"string", width:80, editor:"input"},
             {title:"Phrase1", field:"phrase1", sorter:"string", editor:"input"},
             {title:"Updated", field:"updated", sorter:"string"},
         ],
