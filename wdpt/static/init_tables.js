@@ -26,12 +26,13 @@ function init_ranked_table(table_id, select_id) {
         placeholder:"No Data Set",
         initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}, {column:"known", dir:"asc"}],
         columns:[
-            {title:"Word", field:"word", sorter:"string"},
-            {title:"PoS", field:"p_o_s", sorter:"string"},
+            {title:"Word", field:"word", sorter:"string", width:120},
+            {title:"PoS", field:"p_o_s", sorter:"string", width:80},
             {title:"Rank", field:"rank", sorter:"string", width:80},
             {title:"Level", field:"level", sorter:"string", hozAlign:"center", width:80},
             {title:"Known", field:"known", width:90, hozAlign:"center", formatter:"tickCross", sorter:"boolean"},
-            {title:"Updated", field:"updated", sorter:"string"},
+            {title:"All Ranks", field:"ranks", sorter:"string"},
+            {title:"Updated", field:"updated", sorter:"string", width:180},
         ],
         rowDblClick:function(e, row){
             $.ajax({
@@ -69,11 +70,11 @@ function init_userwords_table(table_id, select_id) {
         placeholder:"No Data Set",
         initialSort:[{column:"urank", dir:"asc"}],
         columns:[
-            {title:"Word", field:"word", sorter:"string"},
-            {title:"PoS", field:"p_o_s", sorter:"string"},
+            {title:"Word", field:"word", sorter:"string", width:120},
+            {title:"PoS", field:"p_o_s", sorter:"string", width:80},
             {title:"URank", field:"urank", sorter:"string", width:80, editor:"input"},
             {title:"Phrase1", field:"phrase1", sorter:"string", editor:"input"},
-            {title:"Updated", field:"updated", sorter:"string"},
+            {title:"Updated", field:"updated", sorter:"string", width:180},
         ],
         rowDblClick:function(e, row){
             $.ajax({
