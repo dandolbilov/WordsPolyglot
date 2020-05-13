@@ -40,6 +40,7 @@ function init_ranked_table(table_id, select_id) {
                 type: "post",
                 success: function(resp, textStatus, xhr){
                     on_ajax_success("ranked-clicked: " + textStatus + ", msg = " + resp.msg);
+                    reload_tables("ranked-clicked");
                 },
                 error: function(jqXHR, textStatus, error){
                     on_ajax_error("ranked-clicked: " + textStatus + ", error = " + error);
@@ -81,6 +82,7 @@ function init_userwords_table(table_id, select_id) {
                 type: "post",
                 success: function(resp, textStatus, xhr){
                     on_ajax_success("userwords-clicked: " + textStatus + ", msg = " + resp.msg);
+                    reload_tables("userwords-clicked");
                 },
                 error: function(jqXHR, textStatus, error){
                     on_ajax_error("userwords-clicked: " + textStatus + ", error = " + error);
