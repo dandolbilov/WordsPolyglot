@@ -49,11 +49,11 @@ def ajax_get_ranked(request):
     page_num  = int(request.GET.get('page', '0'))
     offset = (page_num - 1) * page_size if page_num else 0
 
-    for o in RankedWord.objects.filter(listname=ln)[offset: offset + page_size]:
-        known = UserWord.objects.filter(word=o.word, p_o_s=o.p_o_s).count()
+    extra_column = {'known': "select count(1) from wdpt_userword where wdpt_userword.word = wdpt_rankedword.word and wdpt_userword.p_o_s = wdpt_rankedword.p_o_s"}
+    for o in RankedWord.objects.filter(listname=ln).extra(select=extra_column).order_by('known', 'rank', 'level')[offset: offset + page_size]:
         d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
         d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
-        d.update({'known':'true' if known else 'false'})
+        d.update({'known':'true' if o.known else 'false'})
         resp_data.append(d)
 
     if page_num:

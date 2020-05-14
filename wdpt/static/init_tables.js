@@ -27,7 +27,8 @@ function init_ranked_table(table_id, select_id) {
         paginationSize:5,
         paginationSizeSelector:[5, 10, 50, 100],
         placeholder:"No Data Set",
-        initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}, {column:"known", dir:"asc"}],
+        //ajaxSorting:true,
+        //initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}, {column:"known", dir:"asc"}],
         columns:[
             {title:"Word", field:"word", sorter:"string", width:120},
             {title:"PoS", field:"p_o_s", sorter:"string", width:80},
