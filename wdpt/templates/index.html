@@ -57,6 +57,8 @@ function reload_tables(eventStr) {
 $(document).ready(function() {
     tb1rank = init_ranked_table("table-bw1", "select-bw1");
     init_table_buttons(tb1rank, "select-bw1", "load-bw1", "download-csv-bw1", "download-json-bw1", "from-json-bw1");
+    tb1rank.setData();
+
     tb2user = init_userwords_table("table-bw2", "select-bw2");
     init_table_buttons(tb2user, "select-bw2", "load-bw2", "download-csv-bw2", "download-json-bw2", "from-json-bw2");
 });

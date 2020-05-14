@@ -44,12 +44,23 @@ def index(request):
 def ajax_get_ranked(request):
     resp_data = []
     ln = request.GET.get('ln', '')
-    for o in RankedWord.objects.filter(listname=ln):
+
+    page_size = int(request.GET.get('size', '10000'))
+    page_num  = int(request.GET.get('page', '0'))
+    offset = (page_num - 1) * page_size if page_num else 0
+
+    for o in RankedWord.objects.filter(listname=ln)[offset: offset + page_size]:
         known = UserWord.objects.filter(word=o.word, p_o_s=o.p_o_s).count()
         d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
         d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
         d.update({'known':'true' if known else 'false'})
         resp_data.append(d)
+
+    if page_num:
+        # change response format for "remote pagination"
+        last_page = (RankedWord.objects.filter(listname=ln).count() + page_size - 1) // page_size
+        resp_data = {"last_page":last_page, "data":resp_data}
+
     return HttpResponse(json.dumps(resp_data), content_type="application/json")
 
 

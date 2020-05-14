@@ -13,7 +13,7 @@ function on_ajax_error(msg) {
 function init_ranked_table(table_id, select_id) {
     var listName = $('#'+select_id).val();
     var tb = new Tabulator('#'+table_id, {
-        height:"200px",
+        height:"220px",
         layout:"fitColumns",
         ajaxURLGenerator:function(url, config, params){
             var paramsStr = Object.keys(params).map(function (key) {
@@ -23,6 +23,9 @@ function init_ranked_table(table_id, select_id) {
             return "/ajax/get/ranked/?ln=" + listName + "&" + paramsStr;
         },
         //ajaxProgressiveLoad:"scroll",
+        pagination:"remote",
+        paginationSize:5,
+        paginationSizeSelector:[5, 10, 50, 100],
         placeholder:"No Data Set",
         initialSort:[{column:"rank", dir:"asc"}, {column:"level", dir:"asc"}, {column:"known", dir:"asc"}],
         columns:[
