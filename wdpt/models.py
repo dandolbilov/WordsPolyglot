@@ -22,6 +22,10 @@ class RankedWord(models.Model):
     def __str__(self):
         return '%s (%s)' % (self.word, self.p_o_s)
 
+    @staticmethod
+    def wlist_names():
+        return [d['listname'] for d in RankedWord.objects.values('listname').distinct()]
+
 
 class UserWord(models.Model):
     created = models.DateTimeField('Created', auto_now=False, auto_now_add=True)
@@ -37,3 +41,7 @@ class UserWord(models.Model):
 
     def __str__(self):
         return '%s (%s)' % (self.word, self.p_o_s)
+
+    @staticmethod
+    def wlist_names():
+        return [d['listname'] for d in UserWord.objects.values('listname').distinct()]

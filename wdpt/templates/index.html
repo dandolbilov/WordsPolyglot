@@ -16,8 +16,9 @@
 <h2>Ranked Words</h2>
 <div>
   <select id="select-bw1">
-    <option value="engCambridge" selected>engCambridge</option>
-    <option value="engFreq5000">engFreq5000</option>
+{% for wlist_name in ranked_names %}
+    <option value="{{ wlist_name }}">{{ wlist_name }}</option>
+{% endfor %}
   </select>
   <button id="load-bw1">Load Data</button>
   <button id="download-csv-bw1">Download CSV</button>
@@ -31,7 +32,9 @@
 <h2>User Words</h2>
 <div>
   <select id="select-bw2">
-    <option value="engDanA1" selected>engDanA1</option>
+{% for wlist_name in userwords_names %}
+    <option value="{{ wlist_name }}">{{ wlist_name }}</option>
+{% endfor %}
   </select>
   <button id="load-bw2">Load Data</button>
   <button id="download-csv-bw2">Download CSV</button>

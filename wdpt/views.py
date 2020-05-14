@@ -36,7 +36,9 @@ def add_test_data():
 
 def index(request):
     table_counters = {'RankedWord':RankedWord.objects.count(), 'UserWord':UserWord.objects.count()}
-    return render(request, "index.html", {"table_counters": table_counters})
+    return render(request, "index.html", {"table_counters": table_counters,
+                "ranked_names": RankedWord.wlist_names(), "userwords_names": UserWord.wlist_names()
+                })
 
 
 def ajax_get_ranked(request):
