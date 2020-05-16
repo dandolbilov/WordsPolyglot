@@ -12,28 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import RankedWord, UserWord
 
 
-def fmt_date(dt):
-    # TODO: fix locale
-    if 1:
-        return dt.strftime("%Y-%m-%d %H:%M:%S %Z")
-    else:
-        from django.utils import dateformat
-        return dateformat.format(dt, "Y-m-d H:i:s e")
-
-
-def add_test_data():
-    if not RankedWord.objects.count():
-        RankedWord(listname='engCambridge', word='name', p_o_s='noun', level='A1').save()
-        RankedWord(listname='engCambridge', word='name', p_o_s='verb', level='B1').save()
-        RankedWord(listname='engCambridge', word='street', p_o_s='noun', level='A1').save()
-        RankedWord(listname='engFreq5000', word='name', p_o_s='noun', rank=299).save()
-        RankedWord(listname='engFreq5000', word='name', p_o_s='verb', rank=816).save()
-        RankedWord(listname='engFreq5000', word='street', p_o_s='noun', rank=555).save()
-    if not UserWord.objects.count():
-        UserWord(listname='engDanA1', word='name', p_o_s='noun', urank=1, phrase1="What's the name of this street?").save()
-        UserWord(listname='engDanA1', word='street', p_o_s='noun', urank=2, phrase1="Let's cross the street.").save()
-
-
 def index(request):
     table_counters = {'RankedWord':RankedWord.objects.count(), 'UserWord':UserWord.objects.count()}
     return render(request, "index.html", {"table_counters": table_counters,
@@ -52,7 +30,7 @@ def ajax_get_ranked(request):
     extra_column = {'known': "select count(1) from wdpt_userword where wdpt_userword.word = wdpt_rankedword.word and wdpt_userword.p_o_s = wdpt_rankedword.p_o_s"}
     for o in RankedWord.objects.filter(listname=ln).extra(select=extra_column).order_by('known', 'rank', 'level')[offset: offset + page_size]:
         d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
-        d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
+        d.update({'created': o.str_created(), 'updated': o.str_updated()})
         d.update({'known':'true' if o.known else 'false'})
         resp_data.append(d)
 
@@ -69,7 +47,7 @@ def ajax_get_userwords(request):
     ln = request.GET.get('ln', '')
     for o in UserWord.objects.filter(listname=ln):
         d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'urank', 'phrase1']}
-        d.update({'created':fmt_date(o.created), 'updated':fmt_date(o.updated)})
+        d.update({'created': o.str_created(), 'updated': o.str_updated()})
         resp_data.append(d)
     return HttpResponse(json.dumps(resp_data), content_type="application/json")
 

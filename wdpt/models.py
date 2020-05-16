@@ -22,6 +22,12 @@ class RankedWord(models.Model):
     def __str__(self):
         return '%s (%s)' % (self.word, self.p_o_s)
 
+    def str_created(self):
+        return self.created.strftime("%Y-%m-%d %H:%M:%S %Z") # TODO: fix locale
+
+    def str_updated(self):
+        return self.updated.strftime("%Y-%m-%d %H:%M:%S %Z") # TODO: fix locale
+
     @staticmethod
     def wlist_names():
         return [d['listname'] for d in RankedWord.objects.values('listname').distinct()]
@@ -56,6 +62,12 @@ class UserWord(models.Model):
 
     def __str__(self):
         return '%s (%s)' % (self.word, self.p_o_s)
+
+    def str_created(self):
+        return self.created.strftime("%Y-%m-%d %H:%M:%S %Z") # TODO: fix locale
+
+    def str_updated(self):
+        return self.updated.strftime("%Y-%m-%d %H:%M:%S %Z") # TODO: fix locale
 
     @staticmethod
     def wlist_names():
