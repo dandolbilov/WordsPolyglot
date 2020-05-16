@@ -11,7 +11,6 @@ function on_ajax_error(msg) {
 }
 
 function init_ranked_table(table_id, select_id) {
-    var listName = $('#'+select_id).val();
     var tb = new Tabulator('#'+table_id, {
         height:"220px",
         layout:"fitColumns",
@@ -60,7 +59,6 @@ function init_ranked_table(table_id, select_id) {
 }
 
 function init_userwords_table(table_id, select_id) {
-    var listName = $('#'+select_id).val();
     var tb = new Tabulator('#'+table_id, {
         height:"200px",
         layout:"fitColumns",
@@ -114,23 +112,23 @@ function init_userwords_table(table_id, select_id) {
     return tb;
 }
 
-function init_table_buttons(tb, select_id, button_id, csv_button_id, json_button_id, from_json_button_id) {
+function init_table_buttons(tb, select_id, reload_btn_id, exp_csv_btn_id, exp_json_btn_id, imp_json_btn_id) {
     // trigger AJAX load on button click
-    document.getElementById(button_id).addEventListener("click", function(){
+    document.getElementById(reload_btn_id).addEventListener("click", function(){
         tb.setData(); // reload data from ajaxURL
     });
     // trigger download of CSV file
-    document.getElementById(csv_button_id).addEventListener("click", function(){
+    document.getElementById(exp_csv_btn_id).addEventListener("click", function(){
         var listName = $('#'+select_id).val();
         tb.download("csv", listName + "_data.csv");
     });
     // trigger download of JSON file
-    document.getElementById(json_button_id).addEventListener("click", function(){
+    document.getElementById(exp_json_btn_id).addEventListener("click", function(){
         var listName = $('#'+select_id).val();
         tb.download("json", listName + "_data.json");
     });
     // trigger load from local JSON file
-    document.getElementById(from_json_button_id).addEventListener("click", function(){
+    document.getElementById(imp_json_btn_id).addEventListener("click", function(){
         tb.setDataFromLocalFile().then(function() {
             // save loaded data to server
             var listName = $('#'+select_id).val();
