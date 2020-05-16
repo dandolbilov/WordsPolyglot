@@ -24,6 +24,7 @@
   <button id="exp-csv-tb1">Export CSV</button>
   <button id="exp-json-tb1">Export JSON</button>
   <button id="imp-json-tb1">Import JSON</button>
+  <button id="imp-new-tb1">Import New Lists</button>
 </div>
 <div id="table-tb1"></div>
 <div><b>NOTE: add words to User Words by double click on Ranked Words</b></div>
@@ -40,6 +41,7 @@
   <button id="exp-csv-tb2">Export CSV</button>
   <button id="exp-json-tb2">Export JSON</button>
   <button id="imp-json-tb2">Import JSON</button>
+  <button id="imp-new-tb2">Import New Lists</button>
 </div>
 <div id="table-tb2"></div>
 
@@ -56,11 +58,11 @@ function reload_tables(eventStr) {
 
 $(document).ready(function() {
     tb1rank = init_ranked_table("table-tb1", "select-tb1");
-    init_table_buttons(tb1rank, "ranked", "select-tb1", "reload-tb1", "exp-csv-tb1", "exp-json-tb1", "imp-json-tb1");
+    init_table_buttons(tb1rank, "ranked", "select-tb1", "reload-tb1", "exp-csv-tb1", "exp-json-tb1", "imp-json-tb1", "imp-new-tb1");
     tb1rank.setData();
 
     tb2user = init_userwords_table("table-tb2", "select-tb2");
-    init_table_buttons(tb2user, "userwords", "select-tb2", "reload-tb2", "exp-csv-tb2", "exp-json-tb2", "imp-json-tb2");
+    init_table_buttons(tb2user, "userwords", "select-tb2", "reload-tb2", "exp-csv-tb2", "exp-json-tb2", "imp-json-tb2", "imp-new-tb2");
 });
 
 </script>

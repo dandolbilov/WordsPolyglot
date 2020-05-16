@@ -112,7 +112,7 @@ function init_userwords_table(table_id, select_id) {
     return tb;
 }
 
-function init_table_buttons(tb, tb_type, select_id, reload_btn_id, exp_csv_btn_id, exp_json_btn_id, imp_json_btn_id) {
+function init_table_buttons(tb, tb_type, select_id, reload_btn_id, exp_csv_btn_id, exp_json_btn_id, imp_json_btn_id, imp_new_btn_id) {
     // trigger AJAX load on button click
     document.getElementById(reload_btn_id).addEventListener("click", function(){
         tb.setData(); // reload data from ajaxURL
@@ -128,10 +128,9 @@ function init_table_buttons(tb, tb_type, select_id, reload_btn_id, exp_csv_btn_i
         tb.download("json", listName + "_data.json");
     });
     // trigger load from local JSON file
-    document.getElementById(imp_json_btn_id).addEventListener("click", function(){
+    function import_json(listName) {
         tb.setDataFromLocalFile().then(function() {
             // save loaded data to server
-            var listName = $('#'+select_id).val();
             $.ajax({
                 url: "ajax/put/" + tb_type + "/import/?ln=" + listName,
                 data: JSON.stringify(tb.getData()),
@@ -146,5 +145,13 @@ function init_table_buttons(tb, tb_type, select_id, reload_btn_id, exp_csv_btn_i
                 }
             })
         })
+    }
+    document.getElementById(imp_json_btn_id).addEventListener("click", function(){
+        var listName = $('#'+select_id).val();
+        import_json(listName);
+    });
+    document.getElementById(imp_new_btn_id).addEventListener("click", function(){
+        var listName = '';
+        import_json(listName);
     });
 }
