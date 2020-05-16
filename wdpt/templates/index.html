@@ -56,11 +56,11 @@ function reload_tables(eventStr) {
 
 $(document).ready(function() {
     tb1rank = init_ranked_table("table-tb1", "select-tb1");
-    init_table_buttons(tb1rank, "select-tb1", "reload-tb1", "exp-csv-tb1", "exp-json-tb1", "imp-json-tb1");
+    init_table_buttons(tb1rank, "ranked", "select-tb1", "reload-tb1", "exp-csv-tb1", "exp-json-tb1", "imp-json-tb1");
     tb1rank.setData();
 
     tb2user = init_userwords_table("table-tb2", "select-tb2");
-    init_table_buttons(tb2user, "select-tb2", "reload-tb2", "exp-csv-tb2", "exp-json-tb2", "imp-json-tb2");
+    init_table_buttons(tb2user, "userwords", "select-tb2", "reload-tb2", "exp-csv-tb2", "exp-json-tb2", "imp-json-tb2");
 });
 
 </script>

@@ -87,6 +87,18 @@ def ajax_put_ranked_import(request):
 
 
 @csrf_exempt
+def ajax_put_userwords_import(request):
+    rows = json.loads(request.body)
+    ln = request.GET.get('ln', '')
+
+    del_num = UserWord.delete_by_listname(ln)  # CLEAR LIST
+    UserWord.import_rows(row_list=rows, listname=ln)
+
+    resp_data = {'msg': f'deleted: {del_num}, imported: {len(rows)}'}
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
+@csrf_exempt
 def ajax_put_ranked_clicked(request):
     resp_data = {'msg': ''}
 

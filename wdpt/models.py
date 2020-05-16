@@ -60,3 +60,19 @@ class UserWord(models.Model):
     @staticmethod
     def wlist_names():
         return [d['listname'] for d in UserWord.objects.values('listname').distinct()]
+
+    @staticmethod
+    def import_rows(row_list, listname=''):
+        imp_batch = []
+        for o in row_list:
+            ln = listname if listname else o.get('listname', '')
+            uw = UserWord(listname=ln, word=o.get('word', ''), p_o_s=o.get('p_o_s', ''),
+                        urank=o.get('urank', ''), phrase1=o.get('phrase1', ''),
+                        examples=o.get('examples', ''))
+            imp_batch.append(uw)
+        UserWord.objects.bulk_create(imp_batch)
+
+    @staticmethod
+    def delete_by_listname(listname):
+        del_num, _ = UserWord.objects.filter(listname=listname).delete()
+        return del_num

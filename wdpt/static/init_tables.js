@@ -112,7 +112,7 @@ function init_userwords_table(table_id, select_id) {
     return tb;
 }
 
-function init_table_buttons(tb, select_id, reload_btn_id, exp_csv_btn_id, exp_json_btn_id, imp_json_btn_id) {
+function init_table_buttons(tb, tb_type, select_id, reload_btn_id, exp_csv_btn_id, exp_json_btn_id, imp_json_btn_id) {
     // trigger AJAX load on button click
     document.getElementById(reload_btn_id).addEventListener("click", function(){
         tb.setData(); // reload data from ajaxURL
@@ -133,16 +133,16 @@ function init_table_buttons(tb, select_id, reload_btn_id, exp_csv_btn_id, exp_js
             // save loaded data to server
             var listName = $('#'+select_id).val();
             $.ajax({
-                url: "ajax/put/ranked/import/?ln=" + listName,  // TODO: ranked => ranked/userwords
+                url: "ajax/put/" + tb_type + "/import/?ln=" + listName,
                 data: JSON.stringify(tb.getData()),
                 dataType: 'json',
                 type: "post",
                 success: function(resp, textStatus, xhr){
-                    on_ajax_success("ranked-import: " + textStatus + ", msg = " + resp.msg);
-                    reload_tables("ranked-import");
+                    on_ajax_success(tb_type + "-import: " + textStatus + ", msg = " + resp.msg);
+                    reload_tables(tb_type + "-import");
                 },
                 error: function(jqXHR, textStatus, error){
-                    on_ajax_error("ranked-import: " + textStatus + ", error = " + error);
+                    on_ajax_error(tb_type + "-import: " + textStatus + ", error = " + error);
                 }
             })
         })
