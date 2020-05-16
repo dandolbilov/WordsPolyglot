@@ -26,6 +26,21 @@ class RankedWord(models.Model):
     def wlist_names():
         return [d['listname'] for d in RankedWord.objects.values('listname').distinct()]
 
+    @staticmethod
+    def import_rows(row_list, listname=''):
+        imp_batch = []
+        for o in row_list:
+            ln = listname if listname else o.get('listname', '')
+            rw = RankedWord(listname=ln, word=o.get('word', ''), p_o_s=o.get('p_o_s', ''),
+                            level=o.get('level', ''), rank=o.get('rank', ''))
+            imp_batch.append(rw)
+        RankedWord.objects.bulk_create(imp_batch)
+
+    @staticmethod
+    def delete_by_listname(listname):
+        del_num, _ = RankedWord.objects.filter(listname=listname).delete()
+        return del_num
+
 
 class UserWord(models.Model):
     created = models.DateTimeField('Created', auto_now=False, auto_now_add=True)

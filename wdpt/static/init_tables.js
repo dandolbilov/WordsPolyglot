@@ -139,6 +139,7 @@ function init_table_buttons(tb, select_id, reload_btn_id, exp_csv_btn_id, exp_js
                 type: "post",
                 success: function(resp, textStatus, xhr){
                     on_ajax_success("ranked-import: " + textStatus + ", msg = " + resp.msg);
+                    reload_tables("ranked-import");
                 },
                 error: function(jqXHR, textStatus, error){
                     on_ajax_error("ranked-import: " + textStatus + ", error = " + error);
