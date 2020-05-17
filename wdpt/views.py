@@ -9,13 +9,18 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import RankedWord, UserWord
+from .models import RankedWord, UserWord, Sentence
 
 
 def index(request):
-    table_counters = {'RankedWord':RankedWord.objects.count(), 'UserWord':UserWord.objects.count()}
+    table_counters = {'RankedWord': RankedWord.objects.count(),
+                    'UserWord': UserWord.objects.count(),
+                    'Sentence': Sentence.objects.count()
+                    }
     return render(request, "index.html", {"table_counters": table_counters,
-                "ranked_names": RankedWord.wlist_names(), "userwords_names": UserWord.wlist_names()
+                "ranked_names": RankedWord.wlist_names(),
+                "userwords_names": UserWord.wlist_names(),
+                "sentences_names": Sentence.wlist_names()
                 })
 
 
@@ -52,6 +57,27 @@ def ajax_get_userwords(request):
     return HttpResponse(json.dumps(resp_data), content_type="application/json")
 
 
+def ajax_get_sentences(request):
+    resp_data = []
+    ln = request.GET.get('ln', '')
+
+    page_size = int(request.GET.get('size', '10000'))
+    page_num  = int(request.GET.get('page', '0'))
+    offset = (page_num - 1) * page_size if page_num else 0
+
+    for o in Sentence.objects.filter(listname=ln)[offset: offset + page_size]:
+        d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'phrase', 'phrase_id']}
+        d.update({'created': o.str_created(), 'updated': o.str_updated()})
+        resp_data.append(d)
+
+    if page_num:
+        # change response format for "remote pagination"
+        last_page = (Sentence.objects.filter(listname=ln).count() + page_size - 1) // page_size
+        resp_data = {"last_page":last_page, "data":resp_data}
+
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
 @csrf_exempt
 def ajax_put_ranked_import(request):
     rows = json.loads(request.body)
@@ -71,6 +97,18 @@ def ajax_put_userwords_import(request):
 
     del_num = UserWord.delete_by_listname(ln)  # CLEAR LIST
     UserWord.import_rows(row_list=rows, listname=ln)
+
+    resp_data = {'msg': f'deleted: {del_num}, imported: {len(rows)}'}
+    return HttpResponse(json.dumps(resp_data), content_type="application/json")
+
+
+@csrf_exempt
+def ajax_put_sentences_import(request):
+    rows = json.loads(request.body)
+    ln = request.GET.get('ln', '')
+
+    del_num = Sentence.delete_by_listname(ln)  # CLEAR LIST
+    Sentence.import_rows(row_list=rows, listname=ln)
 
     resp_data = {'msg': f'deleted: {del_num}, imported: {len(rows)}'}
     return HttpResponse(json.dumps(resp_data), content_type="application/json")

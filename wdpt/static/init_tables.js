@@ -112,6 +112,33 @@ function init_userwords_table(table_id, select_id) {
     return tb;
 }
 
+function init_sentences_table(table_id, select_id) {
+    var tb = new Tabulator('#'+table_id, {
+        height:"220px",
+        layout:"fitColumns",
+        ajaxURLGenerator:function(url, config, params){
+            var paramsStr = Object.keys(params).map(function (key) {
+                return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+            }).join('&');
+            var listName = $('#'+select_id).val();
+            return "/ajax/get/sentences/?ln=" + listName + "&" + paramsStr;
+        },
+        pagination:"remote",
+        paginationSize:5,
+        paginationSizeSelector:[5, 10, 50, 100],
+        placeholder:"No Data Set",
+        columns:[
+            {title:"Phrase", field:"phrase", sorter:"string"},
+            {title:"PhraseID", field:"phrase_id", sorter:"string", width:100},
+            {title:"Updated", field:"updated", sorter:"string", width:180},
+        ],
+    });
+    $('#'+select_id).change(function() {
+        tb.setData(); // reload data from ajaxURL
+    });
+    return tb;
+}
+
 function init_table_buttons(tb, tb_type, select_id, reload_btn_id, exp_csv_btn_id, exp_json_btn_id, imp_json_btn_id, imp_new_btn_id) {
     // trigger AJAX load on button click
     document.getElementById(reload_btn_id).addEventListener("click", function(){

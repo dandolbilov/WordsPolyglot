@@ -45,6 +45,21 @@
 </div>
 <div id="table-tb2"></div>
 
+<h2>Sentences</h2>
+<div>
+  <select id="select-tb3">
+{% for wlist_name in sentences_names %}
+    <option value="{{ wlist_name }}">{{ wlist_name }}</option>
+{% endfor %}
+  </select>
+  <button id="reload-tb3">Reload</button>
+  <button id="exp-csv-tb3">Export CSV</button>
+  <button id="exp-json-tb3">Export JSON</button>
+  <button id="imp-json-tb3">Import JSON</button>
+  <button id="imp-new-tb3">Import New Lists</button>
+</div>
+<div id="table-tb3"></div>
+
 </div>
 
 <script>
@@ -63,6 +78,10 @@ $(document).ready(function() {
 
     tb2user = init_userwords_table("table-tb2", "select-tb2");
     init_table_buttons(tb2user, "userwords", "select-tb2", "reload-tb2", "exp-csv-tb2", "exp-json-tb2", "imp-json-tb2", "imp-new-tb2");
+
+    tb3sent = init_sentences_table("table-tb3", "select-tb3");
+    init_table_buttons(tb3sent, "sentences", "select-tb3", "reload-tb3", "exp-csv-tb3", "exp-json-tb3", "imp-json-tb3", "imp-new-tb3");
+    tb3sent.setData();
 });
 
 </script>
