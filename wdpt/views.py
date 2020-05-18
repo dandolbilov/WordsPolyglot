@@ -37,6 +37,7 @@ def ajax_get_ranked(request):
         d = {k:v for k,v in o.__dict__.items() if k in ['id', 'listname', 'word', 'p_o_s', 'level', 'rank']}
         d.update({'created': o.str_created(), 'updated': o.str_updated()})
         d.update({'known':'true' if o.known else 'false'})
+        d['sentences'] = Sentence.html_by_word(word=o.word, limit=3)
         resp_data.append(d)
 
     if page_num:

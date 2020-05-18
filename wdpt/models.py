@@ -124,3 +124,12 @@ class Sentence(models.Model):
     def delete_by_listname(listname):
         del_num, _ = Sentence.objects.filter(listname=listname).delete()
         return del_num
+
+    @staticmethod
+    def find_by_word(word, limit):
+        return Sentence.objects.filter(phrase__contains=' '+word+' ')[0: limit]
+
+    @staticmethod
+    def html_by_word(word, limit):
+        tt = 'https://tatoeba.org/eng/sentences/show/'
+        return '<br/>'.join([f'<a href="{tt}{w.phrase_id}">{w.phrase}</a>' for w in Sentence.find_by_word(word, limit)])
