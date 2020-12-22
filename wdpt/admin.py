@@ -6,7 +6,8 @@
 """
 
 from django.contrib import admin
-from .models import RankedWord, UserWord
+from .models.RankedWord import RankedWord
+from .models.UserWord import UserWord
 
 
 class RankedWordAdmin(admin.ModelAdmin):
