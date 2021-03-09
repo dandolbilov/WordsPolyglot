@@ -45,21 +45,21 @@ Steps:
 
 Word (entry) | PoS | URank | Phrase1
 ------------ | --- | ----- | -------
-             |     |       | *English*
+ | | | *English*
 name | noun | 1 | Your name, please. / What's the name of this **street**?
-**street** | noun | 2 | 
-             |     |       | *German*
+**street** | noun | 2 |
+ | | | *German*
 Name | | 1 | Ihren Namen, bitte. / Wie heißt diese Straße?
-Straße | | 2 | 
-             |     |       | *Spanish*
+Straße | | 2 |
+ | | | *Spanish*
 nombre | | 1 | Su nombre, por favor. / ¿Cómo se llama esta calle?
-calle | | 2 | 
-             |     |       | *French*
+calle | | 2 |
+ | | | *French*
 Nom | | 1 | Votre nom, s'il vous plaît. / Comment se nomme cette rue?
-rue | | 2 | 
-             |     |       | *Russian*
+rue | | 2 |
+ | | | *Russian*
 имя | | 1 | Ваше имя, пожалуйста. / Как называется эта улица?
-улица | | 2 | 
+улица | | 2 |
 
 ## Running Locally (http://localhost:5000/).
 
